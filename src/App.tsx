@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Menu, 
-  X, 
-  ChevronDown, 
-  Github, 
-  Linkedin, 
-  Mail, 
+import {
+  Menu,
+  X,
+  ChevronDown,
+  Github,
+  Linkedin,
+  Mail,
   Phone,
   ExternalLink,
   Code,
   Palette,
   Smartphone,
-  Globe
+  Globe,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -24,52 +27,73 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
     setIsMenuOpen(false);
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-white">
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrollY > 50 ? 'bg-white/95 backdrop-blur-sm shadow-lg' : 'bg-transparent'
-      }`}>
+      <nav
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+          scrollY > 50
+            ? 'bg-gray-100/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-lg'
+            : 'bg-transparent'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="text-2xl font-bold text-blue-900">Huy Nguyễn</div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex space-x-8">
-              {['About', 'Skills', 'Portfolio', 'Contact'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className="text-gray-700 hover:text-blue-900 transition-colors duration-200 font-medium"
-                >
-                  {item}
-                </button>
-              ))}
+            <div className="text-2xl font-bold text-blue-900 dark:text-blue-300">
+              Huy Nguyễn
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            <div className="flex items-center space-x-4">
+              {/* Desktop Navigation */}
+              <div className="hidden md:flex space-x-8">
+                {['About', 'Skills', 'Portfolio', 'Contact'].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => scrollToSection(item.toLowerCase())}
+                    className="text-gray-700 hover:text-blue-900 dark:text-gray-300 dark:hover:text-white transition-colors duration-200 font-medium"
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setIsDarkMode(!isDarkMode)}
+                className="p-2 rounded-md bg-gray-200 dark:bg-gray-700"
+                aria-label="Toggle theme"
+              >
+                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+
+              {/* Mobile Menu Button */}
+              <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
 
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="md:hidden bg-white border-t">
+            <div className="md:hidden bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
               <div className="py-4 space-y-4">
                 {['About', 'Skills', 'Portfolio', 'Contact'].map((item) => (
                   <button
                     key={item}
                     onClick={() => scrollToSection(item.toLowerCase())}
-                    className="block w-full text-left px-4 py-2 text-gray-700 hover:text-blue-900 hover:bg-gray-50 transition-colors duration-200"
+                    className="block w-full text-left px-4 py-2 text-gray-700 hover:text-blue-900 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700 transition-colors duration-200"
                   >
                     {item}
                   </button>
@@ -81,7 +105,7 @@ function App() {
       </nav>
 
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-orange-50 pt-20">
+      <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-gray-100 to-orange-50 dark:from-blue-900 dark:via-gray-900 dark:to-orange-900 pt-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-fade-in">
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
@@ -113,34 +137,34 @@ function App() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white">
+      <section id="about" className="py-20 bg-gray-100 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">About Me</h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                I'm a passionate full-stack developer with over 5 years of experience 
-                creating digital solutions that bridge the gap between design and functionality. 
-                My journey began with a curiosity for how things work, and has evolved into 
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">About Me</h2>
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                I'm a passionate full-stack developer with over 5 years of experience
+                creating digital solutions that bridge the gap between design and functionality.
+                My journey began with a curiosity for how things work, and has evolved into
                 a love for crafting experiences that users genuinely enjoy.
               </p>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                When I'm not coding, you'll find me exploring new design trends, 
-                contributing to open-source projects, or enjoying a good cup of coffee 
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                When I'm not coding, you'll find me exploring new design trends,
+                contributing to open-source projects, or enjoying a good cup of coffee
                 while planning the next big idea.
               </p>
               <div className="flex space-x-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-900">50+</div>
-                  <div className="text-gray-600">Projects</div>
+                  <div className="text-3xl font-bold text-blue-900 dark:text-blue-300">50+</div>
+                  <div className="text-gray-600 dark:text-gray-300">Projects</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-900">5+</div>
-                  <div className="text-gray-600">Years</div>
+                  <div className="text-3xl font-bold text-blue-900 dark:text-blue-300">5+</div>
+                  <div className="text-gray-600 dark:text-gray-300">Years</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-900">100+</div>
-                  <div className="text-gray-600">Happy Clients</div>
+                  <div className="text-3xl font-bold text-blue-900 dark:text-blue-300">100+</div>
+                  <div className="text-gray-600 dark:text-gray-300">Happy Clients</div>
                 </div>
               </div>
             </div>
@@ -161,11 +185,11 @@ function App() {
       </section>
 
       {/* Skills Section */}
-      <section id="skills" className="py-20 bg-gray-50">
+      <section id="skills" className="py-20 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Skills & Expertise</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Skills & Expertise</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               I work with cutting-edge technologies to deliver exceptional results
             </p>
           </div>
@@ -177,18 +201,21 @@ function App() {
               { name: 'Mobile Development', icon: Smartphone, level: 82, color: 'green' },
               { name: 'Web Technologies', icon: Globe, level: 92, color: 'purple' }
             ].map((skill, index) => (
-              <div key={index} className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <div
+                key={index}
+                className="bg-gray-100 dark:bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+              >
                 <div className={`inline-flex p-3 rounded-full bg-${skill.color}-100 mb-4`}>
                   <skill.icon size={24} className={`text-${skill.color}-600`} />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">{skill.name}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{skill.name}</h3>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
                   <div 
                     className={`bg-${skill.color}-500 h-2 rounded-full transition-all duration-1000 delay-300`}
                     style={{ width: `${skill.level}%` }}
                   ></div>
                 </div>
-                <div className="text-sm text-gray-600">{skill.level}%</div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">{skill.level}%</div>
               </div>
             ))}
           </div>
@@ -196,8 +223,8 @@ function App() {
           <div className="mt-16 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
             {['React', 'TypeScript', 'Node.js', 'Python', 'Figma', 'AWS'].map((tech, index) => (
               <div key={index} className="text-center">
-                <div className="bg-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                  <div className="text-2xl font-bold text-gray-700">{tech}</div>
+                <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="text-2xl font-bold text-gray-700 dark:text-gray-300">{tech}</div>
                 </div>
               </div>
             ))}
@@ -206,11 +233,11 @@ function App() {
       </section>
 
       {/* Portfolio Section */}
-      <section id="portfolio" className="py-20 bg-white">
+      <section id="portfolio" className="py-20 bg-gray-100 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Featured Projects</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Featured Projects</h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               A collection of projects I'm proud to have worked on
             </p>
           </div>
@@ -236,7 +263,10 @@ function App() {
                 tags: ['React Native', 'Firebase', 'Redux']
               }
             ].map((project, index) => (
-              <div key={index} className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
+              <div
+                key={index}
+                className="group bg-gray-100 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+              >
                 <div className="relative overflow-hidden">
                   <img 
                     src={project.image} 
@@ -248,11 +278,14 @@ function App() {
                   </div>
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{project.title}</h3>
-                  <p className="text-gray-600 mb-4">{project.description}</p>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{project.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
                   <div className="flex flex-wrap gap-2">
                     {project.tags.map((tag, tagIndex) => (
-                      <span key={tagIndex} className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
+                      <span
+                        key={tagIndex}
+                        className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100 text-sm px-3 py-1 rounded-full"
+                      >
                         {tag}
                       </span>
                     ))}
@@ -319,27 +352,27 @@ function App() {
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl">
+            <div className="bg-gray-100/10 dark:bg-white/10 backdrop-blur-sm p-8 rounded-2xl">
               <form className="space-y-6">
                 <div>
                   <input
                     type="text"
                     placeholder="Your Name"
-                    className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-100/20 dark:bg-white/20 border border-gray-100/30 dark:border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
                   />
                 </div>
                 <div>
                   <input
                     type="email"
                     placeholder="Your Email"
-                    className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 bg-gray-100/20 dark:bg-white/20 border border-gray-100/30 dark:border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200"
                   />
                 </div>
                 <div>
                   <textarea
                     rows={4}
                     placeholder="Your Message"
-                    className="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 resize-none"
+                    className="w-full px-4 py-3 bg-gray-100/20 dark:bg-white/20 border border-gray-100/30 dark:border-white/30 rounded-lg text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 resize-none"
                   ></textarea>
                 </div>
                 <button
